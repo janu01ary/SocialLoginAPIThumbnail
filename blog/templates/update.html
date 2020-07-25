@@ -1,0 +1,157 @@
+<html>
+    <head>
+        <title>맛집 추천 블로그</title>
+        <style>
+            @import url('//cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
+            body {
+                font-family: 'Iropke Batang';
+                text-align: center;
+            }  
+            .nav {
+                text-align: center;
+                height: 100px;
+            }
+            a {
+                text-decoration: none;
+            }
+            .nav-a {
+                font-size: 30pt;
+                color: rgb(0, 138, 230);
+                display: inline-block;
+                margin: 25px;
+            }
+            .my-btn {
+                border: 1px solid rgb(0, 138, 230);
+                border-radius: 20px;
+                color: rgb(0, 138, 230);
+                padding: 5px 8px;
+            }
+            .my-btn:hover {
+                background-color:rgb(0, 138, 230);
+                color: white;
+            }
+            .btn-left {
+                border-top-right-radius: 0px;
+                border-bottom-right-radius: 0px;
+                margin-right: -5px;
+            }
+            .btn-right {
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;
+                border-left: none;
+            }
+            .create-post {
+                text-align: center;
+                position: fixed;
+                bottom: 50px;
+                right: 50px;
+            }
+            .btn-create {
+                padding: 1px 11px;
+                font-size: 20pt;
+                background-color:white;
+            }
+
+            
+            .post-form {
+                text-align: center;
+                margin: 50px;
+            }
+            .post-pub-date {
+                margin: 15px;
+            }
+            .post-img-input-file-hint{
+                position: relative;
+                width: 20%;
+                top: 55px;
+                left: 32.7%;
+                background-color: white;
+                text-align: left;
+            }
+            input:not(#submit), textarea {
+                border: 1px solid rgb(0, 138, 230);
+                width: 50%;
+                padding: 20px;
+                margin: 10px;
+                font-family: 'Iropke Batang';
+                font-size: 12pt;
+            }
+            textarea {
+                height: 250px;
+                resize: vertical;
+            }
+            textarea:focus, input:not(#submit):focus, .uneditable-input:focus {
+                border-color: rgba(0, 138, 230, 0.5);
+                box-shadow: 0 1px 1px rgba(0, 138, 230, 0.075) inset, 0 0 8px rgba(0, 138, 230, 0.6);
+                outline: 0 none;
+            } 
+            #submit {
+                background-color: white;
+                font-size: 12pt;
+                padding: 7px 10px;
+                font-family: 'Iropke Batang';
+                margin: 20px;
+            }
+            #submit:focus {
+                outline: none;
+            }
+            #submit:hover {
+                background-color: rgb(0, 138, 230);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="nav">
+            <a href="{% url 'home'%}" class="nav-a">맛집 추천</a>
+        </div>
+
+        <div class="post-form">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if blog %}
+                    <input type="text" name="title" value="{{blog.title}}" placeholder="제목"><br>
+                    
+                    <!-- <div class="post-pub-date">
+                        {{blog.pub_date}}
+                        {% if blog.isUpdated %}
+                            수정
+                        {% endif %}
+                    </div> -->
+
+                    <div class="post-img">
+                        {% if blog.image %}
+                            <br><img src="{{blog.image_thumbnail.url}}"><br>
+                            <div class="post-img-input-file-hint" id="file-hint"><span>수정할 이미지</span></div>
+                        {% endif %}
+                    <input type="file" name="image" class="post-img-input-file" onchange="javascript: document.getElementById('file-hint').style.visibility = 'hidden'">
+                    </div>
+                    
+                    <textarea name="body" placeholder="본문">{{blog.body}}</textarea><br>
+                    <input type="text" name="lat_lng" value="{{blog.lat_lng}}" placeholder="위도, 경도"><br>
+                {% else %}
+                    <input type="text" name="title" placeholder="제목"><br>
+                    <input type="file" name="image"><br>
+                    <br><textarea name="body" placeholder="본문"></textarea><br>
+                    <input type="text" name="lat_lng" placeholder="위도, 경도"><br>
+                {% endif %}
+                <input id="submit" type="submit" value="글쓰기" class="my-btn">
+            </form>
+            <!-- <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                title <input type="text" name="title" value="{{blog.title}}"><br>
+                {{blog.pub_date}}<br>
+                {% if blog.image %}
+                    현재 image <br><img src="{{blog.image.url}}"><br>
+                    수정할
+                {% endif %}
+                image <input type="file" name="image"><br>
+                body <br><textarea name="body">{{blog.body}}</textarea>
+                <input type="submit" value="글쓰기">
+            </form> -->
+        </div>
+        
+        <div class="create-post">
+            <a href="{% url 'create'%}" class="my-btn btn-create">+</a>
+        </div>
+    </body>
+</html>

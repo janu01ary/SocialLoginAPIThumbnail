@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>맛집 추천 블로그</title>
+        <style>
+            @import url('//cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
+            body {
+                font-family: 'Iropke Batang';
+                text-align: center;
+            }    
+            .nav {
+                text-align: center;
+                height: 100px;
+            }
+            a {
+                text-decoration: none;
+            }
+            .nav-a {
+                font-size: 30pt;
+                color: rgb(0, 138, 230);
+                display: inline-block;
+                margin: 25px;
+            }
+            .loginInfo {
+                width: 85%;
+                text-align: right;
+                margin: 0 auto;
+            }
+            .my-btn {
+                border: 1px solid rgb(0, 138, 230);
+                border-radius: 20px;
+                color: rgb(0, 138, 230);
+                padding: 5px 8px;
+            }
+            .my-btn:hover {
+                background-color:rgb(0, 138, 230);
+                color: white;
+            }
+            .btn-left {
+                border-top-right-radius: 0px;
+                border-bottom-right-radius: 0px;
+                margin-right: -5px;
+            }
+            .btn-right {
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;
+                border-left: none;
+            }
+            .create-post {
+                text-align: center;
+                position: fixed;
+                bottom: 50px;
+                right: 50px;
+            }
+            .btn-create {
+                padding: 1px 11px;
+                font-size: 20pt;
+                background-color:white;
+            }
+
+            
+            .btn-more {
+                color: rgb(0, 138, 230);
+            }
+            .posts {
+                margin: 50px;
+            }
+            table {
+                margin: auto;
+            }
+            .post {
+                text-align: center;
+                width: 40%;
+            }
+            .page {
+                text-align: center;
+            }
+            .page-ul {
+                display: inline-block;
+            }
+            .page-ul .page-li {
+                list-style: none;
+                float: left;
+            }
+            .page-li {
+                padding: 5px;
+                color:rgb(0, 138, 230);
+                border-top: 1px solid rgb(0, 138, 230);
+                border-bottom: 1px solid rgb(0, 138, 230);
+            }
+            .page-li:first-child {
+                border-left: 1px solid rgb(0, 138, 230);
+                border-bottom-left-radius: 15px;
+                border-top-left-radius: 15px;
+                padding-left: 13px;
+            }
+            .page-li:last-child {
+                border-right: 1px solid rgb(0, 138, 230);
+                border-bottom-right-radius: 15px;
+                border-top-right-radius: 15px;
+                padding-right: 13px;
+            }
+            .page-li>a {
+                color:rgb(0, 138, 230);
+            }
+        </style>
+    </head>
+    {% load socialaccount %}
+    {% providers_media_js %}
+    <body>
+        <!-- <div class="loginInfo">
+            {% if user.is_authenticated %}
+            {{user.username}}님 <a href="/accounts/logout" class="myBtn">로그아웃</a><br>
+            {% else %}
+            <a href="/accounts/signup">회원가입</a><br>
+            <a href="{% provider_login_url 'google' %}">구글 로그인</a><br>
+            로그인 해야 됨
+            {% endif %}
+        </div> -->
+
+        <div class="nav">
+            <a href="{% url 'home'%}" class="nav-a">맛집 추천</a>
+            
+            <div class="loginInfo">
+                {% if user.is_authenticated %}
+                {{user.username}}님 <a href="/accounts/logout" class="my-btn">로그아웃</a><br>
+                {% else %}
+                <a href="/accounts/signup" class="my-btn btn-left">회원가입</a>
+                <a href="{% provider_login_url 'google' %}" class="my-btn btn-right">구글 로그인</a><br>
+                {% endif %}
+            </div>
+        </div>
+    
+        <div class="create-post">
+            <a href="{% url 'create'%}" class="my-btn btn-create">+</a>
+        </div>
+
+        <div class="posts">
+            <table>
+                <tr>
+                    {% for blog in posts %}
+                    <td class="post">
+                        {% if blog.image_thumbnail %} 
+                        <img src="{{blog.image_thumbnail.url}}">
+                        {% endif %}
+                        <p>{{blog.title}}</p>
+                        <a href="{%url 'detail' blog.id%}" class="btn-more">더보기</a>
+                        <p>{{blog.pub_date}}
+                            {% if blog.isUpdated %}
+                                <span> 수정</span>
+                            {% endif %}
+                        </p>
+                    </td>
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+        
+        <div class="page">
+            <ul class="page-ul">
+                {% if posts.has_previous %}
+                <li class="page-li"><a href="?page=1">처음</a></li>
+                <li class="page-li"><a href="?page={{posts.previous_page_number}}">이전</a></li>
+                {% endif %}
+
+                <li class="page-li"><span>{{posts.number}} / {{posts.paginator.num_pages}}</span></li>
+
+                {% if posts.has_next %}
+                <li class="page-li"><a href="?page={{posts.next_page_number}}">다음</a></li>
+                <li class="page-li"><a href="?page={{posts.paginator.num_pages}}">끝</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </body>
+</html>
