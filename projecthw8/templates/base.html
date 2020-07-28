@@ -1,0 +1,91 @@
+{% load socialaccount %}
+{% providers_media_js %}
+<style>
+    @import url('//cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
+    body {
+        font-family: 'Iropke Batang';
+        text-align: center;
+    }    
+    .nav {
+        text-align: center;
+        height: 100px;
+    }
+    a {
+        text-decoration: none;
+    }
+    .nav-a {
+        font-size: 30pt;
+        color: rgb(0, 138, 230);
+        display: inline-block;
+        margin: 25px;
+    }
+    .loginInfo {
+        width: 85%;
+        text-align: right;
+        margin: 0 auto;
+    }
+    .my-btn {
+        border: 1px solid rgb(0, 138, 230);
+        border-radius: 20px;
+        color: rgb(0, 138, 230);
+        padding: 5px 8px;
+    }
+    .my-btn:hover {
+        background-color:rgb(0, 138, 230);
+        color: white;
+    }
+    .btn-left {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        margin-right: -5px;
+    }
+    .btn-right {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        border-left: none;
+    }
+    .create-post {
+        text-align: center;
+        position: fixed;
+        bottom: 50px;
+        right: 50px;
+    }
+    .btn-create {
+        padding: 1px 11px;
+        font-size: 20pt;
+        background-color:white;
+    }
+    textarea:focus, input:not(#submit):focus, .uneditable-input:focus {
+        border-color: rgba(0, 138, 230, 0.5);
+        box-shadow: 0 1px 1px rgba(0, 138, 230, 0.075) inset, 0 0 8px rgba(0, 138, 230, 0.6);
+        outline: 0 none;
+    } 
+    input:not(#submit), textarea {
+        border: 1px solid rgb(0, 138, 230);
+    }
+    h1 {
+        margin: 30px;
+        margin-top: 70px;
+    }
+</style>
+<body>
+    <div class="nav">
+        <a href="{% url 'home'%}" class="nav-a">맛집 추천</a>
+        
+        <div class="loginInfo">
+            {% if user.is_authenticated %}
+            {{user.username}}님 <a href="/accounts/logout" class="my-btn">로그아웃</a><br>
+            {% else %}
+            <a href="/accounts/signup" class="my-btn btn-left">회원가입</a>
+            <a href="{% provider_login_url 'google' %}" class="my-btn btn-right">구글 로그인</a><br>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="create-post">
+        <a href="{% url 'create'%}" class="my-btn btn-create">+</a>
+    </div>
+    {% block content %}
+    <!--여기에 컨텐츠-->
+    {% endblock %}
+</body>
